@@ -13,7 +13,7 @@ blueprint:
     **NOTE:** This blueprint only handles device-specific controls. For default actions (e.g., pressing ON/OFF without selecting a device),
     you must use the "ESPHome Wizmote Default Behavior" companion blueprint.
   domain: automation
-  source_url: https://github.com/LfueXemble/ha-blueprints/new/main/wizmote-esphome-blueprint.yml
+  source_url: https://github.com/LfueXemble/ha-blueprints/blob/main/wizmote-esphome-blueprint.yml
   input:
     remote:
       name: WizMote Mac address
