@@ -8,12 +8,11 @@ blueprint:
     - **Optional Devices:** Not all device buttons need to be assigned.
     - **Fan High/Low Speed Control:** The up/down buttons can be configured to set fan speeds to a low and high percentage.
     - **Configurable Timeouts:** All delays and transition times are customizable through the blueprint UI.
-    - **Moon Button:** It's a macro!
 
     **NOTE:** This blueprint only handles device-specific controls. For default actions (e.g., pressing ON/OFF without selecting a device),
     you must use the "ESPHome Wizmote Default Behavior" companion blueprint.
   domain: automation
-  source_url: https://github.com/LfueXemble/ha-blueprints/blob/main/wizmote-esphome-blueprint.yml
+  source_url: https://github.com/jesserockz/wizmote-esphome/blob/main/wizmote-esphome-blueprint.yml
   input:
     remote:
       name: WizMote Mac address
@@ -58,35 +57,35 @@ blueprint:
           unit_of_measurement: "%"
     device_one:
       name: Device 1
-      description: The light, switch, fan, script, or automation to control after pressing 1.
+      description: The light, switch, or fan to control after pressing 1.
       selector:
         target:
           entity:
-            domain: [light, switch, fan, script, automation]
+            domain: [light, switch, fan]
       default: {}
     device_two:
       name: Device 2
-      description: The light, switch, fan, script, or automation to control after pressing 2.
+      description: The light, switch, or fan to control after pressing 2.
       selector:
         target:
           entity:
-            domain: [light, switch, fan, script, automation]
+            domain: [light, switch, fan]
       default: {}
     device_three:
       name: Device 3
-      description: The light, switch, fan, script, or automation to control after pressing 3.
+      description: The light, switch, or fan to control after pressing 3.
       selector:
         target:
           entity:
-            domain: [light, switch, fan, script, automation]
+            domain: [light, switch, fan]
       default: {}
     device_four:
       name: Device 4
-      description: The light, switch, fan, script, or automation to control after pressing 4.
+      description: The light, switch, or fan to control after pressing 4.
       selector:
         target:
           entity:
-            domain: [light, switch, fan, script, automation]
+            domain: [light, switch, fan]
       default: {}
     moon_color:
       name: Moon Button Color (placeholder action)
@@ -129,14 +128,8 @@ action:
                 - choose:
                     - conditions: "{{ wait.trigger.event.data.button | int == 1 }}"
                       sequence:
-                        - choose:
-                            - conditions: "{{ target_device.entity_id is defined and (target_device.entity_id if target_device.entity_id is string else target_device.entity_id[0]).split('.')[0] == 'automation' }}"
-                              sequence:
-                                - service: automation.trigger
-                                  target: !input device_one
-                          default:
-                            - service: homeassistant.turn_on
-                              target: !input device_one
+                        - service: homeassistant.turn_on
+                          target: !input device_one
                     - conditions: "{{ wait.trigger.event.data.button | int == 2 }}"
                       sequence:
                         - service: homeassistant.turn_off
@@ -188,14 +181,8 @@ action:
                 - choose:
                     - conditions: "{{ wait.trigger.event.data.button | int == 1 }}"
                       sequence:
-                        - choose:
-                            - conditions: "{{ target_device.entity_id is defined and (target_device.entity_id if target_device.entity_id is string else target_device.entity_id[0]).split('.')[0] == 'automation' }}"
-                              sequence:
-                                - service: automation.trigger
-                                  target: !input device_two
-                          default:
-                            - service: homeassistant.turn_on
-                              target: !input device_two
+                        - service: homeassistant.turn_on
+                          target: !input device_two
                     - conditions: "{{ wait.trigger.event.data.button | int == 2 }}"
                       sequence:
                         - service: homeassistant.turn_off
@@ -247,14 +234,8 @@ action:
                 - choose:
                     - conditions: "{{ wait.trigger.event.data.button | int == 1 }}"
                       sequence:
-                        - choose:
-                            - conditions: "{{ target_device.entity_id is defined and (target_device.entity_id if target_device.entity_id is string else target_device.entity_id[0]).split('.')[0] == 'automation' }}"
-                              sequence:
-                                - service: automation.trigger
-                                  target: !input device_three
-                          default:
-                            - service: homeassistant.turn_on
-                              target: !input device_three
+                        - service: homeassistant.turn_on
+                          target: !input device_three
                     - conditions: "{{ wait.trigger.event.data.button | int == 2 }}"
                       sequence:
                         - service: homeassistant.turn_off
@@ -306,14 +287,8 @@ action:
                 - choose:
                     - conditions: "{{ wait.trigger.event.data.button | int == 1 }}"
                       sequence:
-                        - choose:
-                            - conditions: "{{ target_device.entity_id is defined and (target_device.entity_id if target_device.entity_id is string else target_device.entity_id[0]).split('.')[0] == 'automation' }}"
-                              sequence:
-                                - service: automation.trigger
-                                  target: !input device_four
-                          default:
-                            - service: homeassistant.turn_on
-                              target: !input device_four
+                        - service: homeassistant.turn_on
+                          target: !input device_four
                     - conditions: "{{ wait.trigger.event.data.button | int == 2 }}"
                       sequence:
                         - service: homeassistant.turn_off
