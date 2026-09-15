@@ -29,7 +29,7 @@ blueprint:
           min: 1
           max: 100
           unit_of_measurement: "%"
-      default: 66
+      default: 35
     fan_high_speed:
       name: Fan High Speed
       description: The speed percentage for the fan when the 'up' button is pressed.
@@ -55,7 +55,6 @@ blueprint:
           min: 1
           max: 50
           unit_of_measurement: "%"
-      default: 10
     device_one:
       name: Device 1
       description: The light, switch, or fan to control after pressing 1.
@@ -88,14 +87,43 @@ blueprint:
           entity:
             domain: [light, switch, fan]
       default: {}
-    moon_color:
-      name: Moon Button Color (placeholder action)
-      description: RGB color applied to the selected device when the Moon
-        button is pressed while that device is selected. Replace this
-        branch's action later once you decide what Moon should actually do.
+    automation_script_one:
+      name: Automation/Script 1
+      description: Automation or script to trigger when Moon is pressed while
+        selection 1 is active. Independent of Device 1 — has nothing to do
+        with lights/switches/fans.
       selector:
-        color_rgb:
-      default: [255, 0, 0]
+        target:
+          entity:
+            domain: [script, automation]
+      default: {}
+    automation_script_two:
+      name: Automation/Script 2
+      description: Automation or script to trigger when Moon is pressed while
+        selection 2 is active. Independent of Device 2.
+      selector:
+        target:
+          entity:
+            domain: [script, automation]
+      default: {}
+    automation_script_three:
+      name: Automation/Script 3
+      description: Automation or script to trigger when Moon is pressed while
+        selection 3 is active. Independent of Device 3.
+      selector:
+        target:
+          entity:
+            domain: [script, automation]
+      default: {}
+    automation_script_four:
+      name: Automation/Script 4
+      description: Automation or script to trigger when Moon is pressed while
+        selection 4 is active. Independent of Device 4.
+      selector:
+        target:
+          entity:
+            domain: [script, automation]
+      default: {}
 
 mode: restart
 
@@ -159,10 +187,20 @@ action:
                               target: !input device_one
                     - conditions: "{{ wait.trigger.event.data.button | int == 3 }}"
                       sequence:
-                        - service: light.turn_on
-                          data:
-                            rgb_color: !input moon_color
-                          target: !input device_one
+                        - variables:
+                            moon_target: !input automation_script_one
+                        - if:
+                            - condition: template
+                              value_template: "{{ moon_target != {} }}"
+                          then:
+                            - choose:
+                                - conditions: "{{ moon_target.entity_id is defined and (moon_target.entity_id if moon_target.entity_id is string else moon_target.entity_id[0]).split('.')[0] == 'automation' }}"
+                                  sequence:
+                                    - service: automation.trigger
+                                      target: !input automation_script_one
+                              default:
+                                - service: script.turn_on
+                                  target: !input automation_script_one
       - conditions: "{{ button == 2 }}"
         sequence:
           - variables:
@@ -212,10 +250,20 @@ action:
                               target: !input device_two
                     - conditions: "{{ wait.trigger.event.data.button | int == 3 }}"
                       sequence:
-                        - service: light.turn_on
-                          data:
-                            rgb_color: !input moon_color
-                          target: !input device_two
+                        - variables:
+                            moon_target: !input automation_script_two
+                        - if:
+                            - condition: template
+                              value_template: "{{ moon_target != {} }}"
+                          then:
+                            - choose:
+                                - conditions: "{{ moon_target.entity_id is defined and (moon_target.entity_id if moon_target.entity_id is string else moon_target.entity_id[0]).split('.')[0] == 'automation' }}"
+                                  sequence:
+                                    - service: automation.trigger
+                                      target: !input automation_script_two
+                              default:
+                                - service: script.turn_on
+                                  target: !input automation_script_two
       - conditions: "{{ button == 3 }}"
         sequence:
           - variables:
@@ -265,10 +313,20 @@ action:
                               target: !input device_three
                     - conditions: "{{ wait.trigger.event.data.button | int == 3 }}"
                       sequence:
-                        - service: light.turn_on
-                          data:
-                            rgb_color: !input moon_color
-                          target: !input device_three
+                        - variables:
+                            moon_target: !input automation_script_three
+                        - if:
+                            - condition: template
+                              value_template: "{{ moon_target != {} }}"
+                          then:
+                            - choose:
+                                - conditions: "{{ moon_target.entity_id is defined and (moon_target.entity_id if moon_target.entity_id is string else moon_target.entity_id[0]).split('.')[0] == 'automation' }}"
+                                  sequence:
+                                    - service: automation.trigger
+                                      target: !input automation_script_three
+                              default:
+                                - service: script.turn_on
+                                  target: !input automation_script_three
       - conditions: "{{ button == 4 }}"
         sequence:
           - variables:
@@ -318,7 +376,17 @@ action:
                               target: !input device_four
                     - conditions: "{{ wait.trigger.event.data.button | int == 3 }}"
                       sequence:
-                        - service: light.turn_on
-                          data:
-                            rgb_color: !input moon_color
-                          target: !input device_four
+                        - variables:
+                            moon_target: !input automation_script_four
+                        - if:
+                            - condition: template
+                              value_template: "{{ moon_target != {} }}"
+                          then:
+                            - choose:
+                                - conditions: "{{ moon_target.entity_id is defined and (moon_target.entity_id if moon_target.entity_id is string else moon_target.entity_id[0]).split('.')[0] == 'automation' }}"
+                                  sequence:
+                                    - service: automation.trigger
+                                      target: !input automation_script_four
+                              default:
+                                - service: script.turn_on
+                                  target: !input automation_script_four
