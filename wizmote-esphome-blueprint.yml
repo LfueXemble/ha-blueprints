@@ -29,7 +29,7 @@ blueprint:
           min: 1
           max: 100
           unit_of_measurement: "%"
-      default: 66
+      default: 35
     fan_high_speed:
       name: Fan High Speed
       description: The speed percentage for the fan when the 'up' button is pressed.
@@ -55,7 +55,6 @@ blueprint:
           min: 1
           max: 50
           unit_of_measurement: "%"
-      default: 10
     device_one:
       name: Device 1
       description: The light, switch, or fan to control after pressing 1.
